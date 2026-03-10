@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use bn254_blackbox_solver::Bn254BlackBoxSolver;
+use t256_blackbox_solver::T256BlackboxSolver;
 use clap::Args;
 use color_eyre::eyre;
 use nargo::{foreign_calls::DefaultForeignCallBuilder, ops::execute_program_with_profiling};
@@ -136,7 +136,7 @@ fn profile_program_execution(
     let (_, profiling_samples) = execute_program_with_profiling(
         &program.bytecode,
         initial_witness,
-        &Bn254BlackBoxSolver,
+        &T256BlackboxSolver,
         &mut DefaultForeignCallBuilder::default().build(),
     )
     .map_err(|e| eyre::eyre!("Execution failed: {}", e))?;

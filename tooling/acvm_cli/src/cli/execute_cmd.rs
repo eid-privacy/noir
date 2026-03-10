@@ -4,7 +4,7 @@ use std::path::PathBuf;
 use acir::FieldElement;
 use acir::circuit::Program;
 use acir::native_types::{WitnessMap, WitnessStack};
-use bn254_blackbox_solver::Bn254BlackBoxSolver;
+use t256_blackbox_solver::T256BlackboxSolver;
 use clap::Args;
 
 use nargo::foreign_calls::{DefaultForeignCallBuilder, OracleResolverUrl};
@@ -87,7 +87,8 @@ pub(crate) fn execute_program_from_witness(
     nargo::ops::execute_program(
         &program,
         inputs_map,
-        &Bn254BlackBoxSolver,
+        // &Bn254BlackBoxSolver,
+        &T256BlackboxSolver,
         &mut foreign_call_executor,
     )
     .map_err(CliError::CircuitExecutionError)
