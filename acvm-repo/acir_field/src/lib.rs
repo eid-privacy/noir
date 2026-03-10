@@ -28,6 +28,8 @@ pub fn truncate_to<F: AcirField>(input: &F, bits: u32) -> F {
 cfg_if::cfg_if! {
     if #[cfg(feature = "bls12_381")] {
         pub type FieldElement = field_element::FieldElement<ark_bls12_381::Fr>;
+    } else if #[cfg(feature = "secp256r1")] {
+        pub type FieldElement = field_element::FieldElement<ark_secp256r1::Fr>;
     } else {
         pub type FieldElement = field_element::FieldElement<ark_bn254::Fr>;
     }
