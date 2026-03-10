@@ -11,7 +11,7 @@ use acvm::{
 use bn254_blackbox_solver::derive_generators;
 use iter_extended::vecmap;
 use num_bigint::BigUint;
-
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use crate::{
     brillig::assert_u32,
     ssa::ir::{
@@ -603,6 +603,8 @@ fn simplify_black_box_func(
     cfg_if::cfg_if! {
         if #[cfg(feature = "bn254")] {
             let solver = bn254_blackbox_solver::Bn254BlackBoxSolver;
+        } else if #[cfg(feature = "t256")] {
+            let solver = t256_blackbox_solver::T256BlackboxSolver;
         } else {
             let solver = acvm::blackbox_solver::StubbedBlackBoxSolver;
         }

@@ -1,7 +1,7 @@
 use std::{io::Write, path::PathBuf};
 
 use acvm::{BlackBoxFunctionSolver, FieldElement};
-use bn254_blackbox_solver::Bn254BlackBoxSolver;
+// use bn254_blackbox_solver::Bn254BlackBoxSolver;
 use clap::Args;
 use fm::FileManager;
 use nargo::{
@@ -22,7 +22,7 @@ use noirc_frontend::{
 };
 use rayon::prelude::{ParallelBridge, ParallelIterator};
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
-
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use crate::errors::CliError;
 
 use super::{LockType, PackageOptions, WorkspaceCommand};
@@ -176,7 +176,8 @@ pub(crate) fn run(args: FuzzCommand, workspace: Workspace) -> Result<(), CliErro
     let fuzzing_reports: Vec<Vec<(String, FuzzingRunStatus)>> = workspace
         .into_iter()
         .map(|package| {
-            run_fuzzers::<Bn254BlackBoxSolver>(
+            // run_fuzzers::<Bn254BlackBoxSolver>(
+            run_fuzzers::<StubbedBlackBoxSolver>(
                 &file_manager,
                 &parsed_files,
                 package,
