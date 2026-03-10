@@ -477,7 +477,7 @@ mod tests {
         },
         native_types::{Expression, Witness, WitnessMap},
     };
-    use bn254_blackbox_solver::Bn254BlackBoxSolver;
+    use acvm_blackbox_solver::StubbedBlackBoxSolver;
 
     use super::validate_witness;
     use crate::pwg::{
@@ -556,7 +556,7 @@ mod tests {
             (Witness(3), FieldElement::from(6u128)), // Wrong value!
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert_unsatisfied_constraint(
             validate_witness(&backend, &witness_map, &circuit),
             0,
@@ -613,7 +613,7 @@ mod tests {
             (Witness(1), FieldElement::from(256u128)), // Too large for 8 bits
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert_unsatisfied_constraint(
             validate_witness(&backend, &witness_map, &circuit),
             0,
@@ -657,7 +657,7 @@ mod tests {
             (Witness(3), FieldElement::from(0b1111u128)), // Wrong!
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert_unsatisfied_constraint(
             validate_witness(&backend, &witness_map, &circuit),
             0,
@@ -701,7 +701,7 @@ mod tests {
             (Witness(3), FieldElement::from(0b1111u128)), // Wrong!
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert_unsatisfied_constraint(
             validate_witness(&backend, &witness_map, &circuit),
             0,
@@ -722,7 +722,7 @@ mod tests {
         // Empty witness map - missing w1
         let witness_map = WitnessMap::default();
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert_unsatisfied_constraint(
             validate_witness(&backend, &witness_map, &circuit),
             0,
@@ -764,7 +764,7 @@ mod tests {
             (Witness(3), FieldElement::from(3u128)),
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert_eq!(
             validate_witness(&backend, &witness_map, &circuit).unwrap_err(),
             OpcodeResolutionError::OpcodeNotSolvable(OpcodeNotSolvable::MissingAssignment(2)),
@@ -786,7 +786,7 @@ mod tests {
             (Witness(2), FieldElement::from(2u128)),
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert_eq!(
             validate_witness(&backend, &witness_map, &circuit).unwrap_err(),
             OpcodeResolutionError::OpcodeNotSolvable(OpcodeNotSolvable::MissingAssignment(3)),
@@ -862,7 +862,7 @@ mod tests {
             (Witness(3), FieldElement::from(99u128)), // Wrong! Should be 42
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert_unsatisfied_constraint(
             validate_witness(&backend, &witness_map, &circuit),
             1,
