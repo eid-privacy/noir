@@ -5,11 +5,11 @@ use acvm::{
         native_types::{WitnessMap, WitnessStack},
     },
 };
-use bn254_blackbox_solver::Bn254BlackBoxSolver;
 use nargo::errors::NargoError;
 use nargo::foreign_calls::DefaultForeignCallBuilder;
 use nargo::ops::execute_program;
 use thiserror::Error;
+use t256_blackbox_solver::T256BlackboxSolver;
 
 /// Errors that can occur during execution of the program
 /// It can be NargoError or rust panic
@@ -69,7 +69,9 @@ pub fn execute_single(
     }));
 
     let result =
-        std::panic::catch_unwind(|| execute::<Bn254BlackBoxSolver>(program, initial_witness));
+        std::panic::catch_unwind(|| execute::<T256BlackboxSolver>(program, initial_witness));
+    // std::panic::catch_unwind(|| execute::<StubbedBlackBoxSolver>(program, initial_witness));
+    // std::panic::catch_unwind(|| execute::<Bn254BlackBoxSolver>(program, initial_witness));
 
     // Restore the previous panic hook
     std::panic::set_hook(previous_hook);
