@@ -82,7 +82,8 @@ fn run_with_generator(
     let solved_witness_stack_err = nargo::ops::execute_program_with_profiling(
         &program.bytecode,
         initial_witness,
-        &Bn254BlackBoxSolver,
+        // &Bn254BlackBoxSolver,
+        &StubbedBlackBoxSolver,
         &mut DefaultForeignCallBuilder::default().with_output(std::io::stdout()).build(),
     );
     let mut profiling_samples = match solved_witness_stack_err {

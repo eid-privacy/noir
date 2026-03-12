@@ -13,7 +13,8 @@ use std::{
 };
 
 use acvm::{BlackBoxFunctionSolver, FieldElement};
-use bn254_blackbox_solver::Bn254BlackBoxSolver;
+use acvm_blackbox_solver::StubbedBlackBoxSolver;
+//use bn254_blackbox_solver::Bn254BlackBoxSolver;
 use clap::Args;
 use fm::FileManager;
 use formatters::{Formatter, JsonFormatter, PrettyFormatter, TerseFormatter};
@@ -521,7 +522,8 @@ impl<'a> TestRunner<'a> {
                             let Some(package) = iter.lock().unwrap().next() else {
                                 break;
                             };
-                            let tests = self.collect_package_tests::<Bn254BlackBoxSolver>(
+                            // let tests = self.collect_package_tests::<Bn254BlackBoxSolver>(
+                            let tests = self.collect_package_tests::<StubbedBlackBoxSolver>(
                                 package,
                                 self.args.oracle_resolver.as_deref(),
                                 Some(self.workspace.root_dir.clone()),

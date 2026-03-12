@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use bn254_blackbox_solver::Bn254BlackBoxSolver;
 use clap::Args;
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use noirc_artifacts::program::CompiledProgram;
 
 use crate::{
@@ -134,7 +135,8 @@ fn execute(circuit: &CompiledProgram, args: &ExecuteCommand) -> Result<Execution
     }
     .build_with_base(transcript_executor);
 
-    let blackbox_solver = Bn254BlackBoxSolver;
+    // let blackbox_solver = Bn254BlackBoxSolver;
+    let blackbox_solver = StubbedBlackBoxSolver;
 
     execution::execute(circuit, &blackbox_solver, &mut foreign_call_executor, &args.prover_file)
 }

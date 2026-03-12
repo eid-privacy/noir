@@ -6,6 +6,7 @@ use acvm::pwg::{OpcodeResolutionError, ResolvedAssertionPayload};
 use arbitrary::Unstructured;
 use bn254_blackbox_solver::Bn254BlackBoxSolver;
 use color_eyre::eyre::{self, WrapErr};
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use nargo::{NargoError, errors::ExecutionError, foreign_calls::DefaultForeignCallBuilder};
 use noirc_abi::{Abi, InputMap, input_parser::InputValue};
 use noirc_evaluator::{ErrorType, ssa::SsaProgramArtifact};
@@ -256,7 +257,8 @@ pub struct CompareCompiled<P> {
 impl<P> CompareCompiled<P> {
     /// Execute the two SSAs and compare the results.
     pub fn exec(&self) -> eyre::Result<CompareCompiledResult> {
-        let blackbox_solver = Bn254BlackBoxSolver;
+        // let blackbox_solver = Bn254BlackBoxSolver;
+        let blackbox_solver = StubbedBlackBoxSolver;
         let initial_witness = self.abi.encode(&self.input_map, None).wrap_err("abi::encode")?;
 
         let do_exec = |program| {

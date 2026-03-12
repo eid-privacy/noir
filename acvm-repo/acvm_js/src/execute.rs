@@ -8,11 +8,11 @@ use acvm::{
     acir::native_types::{WitnessMap, WitnessStack},
     pwg::{ACVM, ACVMStatus, ErrorLocation, OpcodeResolutionError, ResolvedAssertionPayload},
 };
-use bn254_blackbox_solver::Bn254BlackBoxSolver;
+//use bn254_blackbox_solver::Bn254BlackBoxSolver;
 
 use js_sys::Error;
 use wasm_bindgen::prelude::wasm_bindgen;
-
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use crate::{
     JsExecutionError, JsSolvedAndReturnWitness, JsWitnessMap, JsWitnessStack,
     foreign_call::{ForeignCallHandler, resolve_brillig},
@@ -146,7 +146,8 @@ async fn execute_program_with_native_program_and_return(
     initial_witness: JsWitnessMap,
     foreign_call_executor: &ForeignCallHandler,
 ) -> Result<WitnessStack<FieldElement>, Error> {
-    let blackbox_solver = Bn254BlackBoxSolver;
+    // let blackbox_solver = Bn254BlackBoxSolver;
+    let blackbox_solver = StubbedBlackBoxSolver;
     let executor = ProgramExecutor::new(
         &program.functions,
         &program.unconstrained_functions,

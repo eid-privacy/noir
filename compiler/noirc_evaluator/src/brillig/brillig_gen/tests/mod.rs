@@ -11,6 +11,7 @@ use acvm::{
     acir::brillig::Opcode as BrilligOpcode,
     brillig_vm::{VM, VMStatus},
 };
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use bn254_blackbox_solver::Bn254BlackBoxSolver;
 
 use crate::{
@@ -73,7 +74,8 @@ fn execute_bytecode(
     byte_code: &[BrilligOpcode<FieldElement>],
     calldata: Vec<FieldElement>,
 ) -> Vec<FieldElement> {
-    let solver = Bn254BlackBoxSolver;
+    // let solver = Bn254BlackBoxSolver;
+    let solver = StubbedBlackBoxSolver;
     let mut vm = VM::new(calldata, byte_code, &solver, false, None);
     let status = vm.process_opcodes();
     match status {

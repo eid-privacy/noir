@@ -6,7 +6,7 @@ use acir::circuit::Program;
 use acir::native_types::{WitnessMap, WitnessStack};
 use bn254_blackbox_solver::Bn254BlackBoxSolver;
 use clap::Args;
-
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use nargo::foreign_calls::DefaultForeignCallBuilder;
 use noir_artifact_cli::errors::CliError;
 use noir_artifact_cli::fs::artifact::read_bytecode_from_file;
@@ -84,7 +84,8 @@ pub(crate) fn execute_program_from_witness(
     nargo::ops::execute_program(
         &program,
         inputs_map,
-        &Bn254BlackBoxSolver,
+        // &Bn254BlackBoxSolver,
+        &StubbedBlackBoxSolver,
         &mut foreign_call_executor,
     )
     .map_err(CliError::CircuitExecutionError)

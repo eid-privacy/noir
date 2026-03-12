@@ -8,7 +8,7 @@ use clap::{Parser, Subcommand};
 use color_eyre::eyre;
 use const_format::formatcp;
 use tracing_subscriber::{EnvFilter, fmt::format::FmtSpan};
-
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use noir_artifact_cli::{Artifact, commands::execute_cmd, fs::witness::load_witness_from_file};
 
 const PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -105,7 +105,8 @@ fn check_witness_file(
     };
 
     let mut witness_stack = load_witness_from_file(witness_path)?;
-    let backend = Bn254BlackBoxSolver;
+    let backend = StubbedBlackBoxSolver;
+    // let backend = Bn254BlackBoxSolver;
 
     while let Some(stack_item) = witness_stack.pop() {
         let function_index = stack_item.index as usize;

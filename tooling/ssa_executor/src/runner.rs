@@ -10,6 +10,7 @@ use nargo::errors::NargoError;
 use nargo::foreign_calls::DefaultForeignCallBuilder;
 use nargo::ops::execute_program;
 use thiserror::Error;
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 
 /// Errors that can occur during execution of the program
 /// It can be NargoError or rust panic
@@ -69,7 +70,8 @@ pub fn execute_single(
     }));
 
     let result =
-        std::panic::catch_unwind(|| execute::<Bn254BlackBoxSolver>(program, initial_witness));
+        std::panic::catch_unwind(|| execute::<StubbedBlackBoxSolver>(program, initial_witness));
+    // std::panic::catch_unwind(|| execute::<Bn254BlackBoxSolver>(program, initial_witness));
 
     // Restore the previous panic hook
     std::panic::set_hook(previous_hook);

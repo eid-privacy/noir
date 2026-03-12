@@ -24,6 +24,7 @@ use dap::types::{
     Breakpoint, DisassembledInstruction, Scope, Source, StackFrame, SteppingGranularity,
     StoppedEventReason, Thread, Variable,
 };
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use noirc_artifacts::debug::DebugArtifact;
 
 use fm::FileId;
@@ -615,7 +616,8 @@ pub fn run_session<R: Read, W: Write>(
         file_map: project.compiled_program.file_map.clone(),
     };
 
-    let solver = Bn254BlackBoxSolver;
+    // let solver = Bn254BlackBoxSolver;
+    let solver = StubbedBlackBoxSolver;
     let mut session =
         DapSession::new(server, &solver, &project, &debug_artifact, run_params.oracle_resolver_url);
 

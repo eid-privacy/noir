@@ -5,6 +5,7 @@ use acvm::{
 };
 use bn254_blackbox_solver::Bn254BlackBoxSolver; // Currently locked to only bn254!
 use im::{Vector, vector};
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use noirc_errors::Location;
 
 use crate::{
@@ -168,7 +169,7 @@ fn embedded_curve_add(
     let p2inf: FieldElement =
         if p2x.is_zero() && p2y.is_zero() { FieldElement::one() } else { FieldElement::zero() };
 
-    let (x, y, _inf) = Bn254BlackBoxSolver
+    let (x, y, _inf) = StubbedBlackBoxSolver
         .ec_add(
             &p1x, &p1y, &p1inf, &p2x, &p2y, &p2inf,
             true, // Predicate is always true as interpreter has control flow to handle false case
@@ -211,7 +212,7 @@ fn multi_scalar_mul(
         scalars_hi.push(hi);
     }
 
-    let (x, y, _inf) = Bn254BlackBoxSolver
+    let (x, y, _inf) = StubbedBlackBoxSolver
         .multi_scalar_mul(
             &points,
             &scalars_lo,
@@ -240,7 +241,7 @@ fn poseidon2_permutation(arguments: Vec<(Value, Location)>, location: Location) 
 
     let (input, typ) = get_array_map(input, get_field)?;
 
-    let fields = Bn254BlackBoxSolver
+    let fields = StubbedBlackBoxSolver
         .poseidon2_permutation(&input)
         .map_err(|error| InterpreterError::BlackBoxError(error, location))?;
 

@@ -451,7 +451,7 @@ mod tests {
         },
         native_types::{Expression, Witness, WitnessMap},
     };
-    use bn254_blackbox_solver::Bn254BlackBoxSolver;
+    use acvm_blackbox_solver::StubbedBlackBoxSolver;
 
     use super::validate_witness;
 
@@ -488,7 +488,8 @@ mod tests {
             (Witness(3), FieldElement::from(5u128)),
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
+        // let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 
@@ -513,7 +514,7 @@ mod tests {
             (Witness(3), FieldElement::from(6u128)), // Wrong value!
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_err());
     }
 
@@ -534,7 +535,8 @@ mod tests {
             (Witness(3), FieldElement::from(12u128)),
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+         let backend = StubbedBlackBoxSolver;
+
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 
@@ -550,7 +552,7 @@ mod tests {
             (Witness(1), FieldElement::from(255u128)), // Max 8-bit value
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 
@@ -566,7 +568,7 @@ mod tests {
             (Witness(1), FieldElement::from(256u128)), // Too large for 8 bits
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_err());
     }
 
@@ -586,7 +588,7 @@ mod tests {
             (Witness(3), FieldElement::from(0b1000u128)),
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 
@@ -606,7 +608,7 @@ mod tests {
             (Witness(3), FieldElement::from(0b1111u128)), // Wrong!
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_err());
     }
 
@@ -626,7 +628,7 @@ mod tests {
             (Witness(3), FieldElement::from(0b0110u128)),
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 
@@ -646,7 +648,7 @@ mod tests {
             (Witness(3), FieldElement::from(0b1111u128)), // Wrong!
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_err());
     }
 
@@ -663,7 +665,7 @@ mod tests {
         // Empty witness map - missing w1
         let witness_map = WitnessMap::default();
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         // The expression evaluates with missing witness, but won't be zero
         // so this should fail
         assert!(validate_witness(&backend, witness_map, &circuit).is_err());
@@ -686,7 +688,7 @@ mod tests {
             (Witness(3), FieldElement::from(3u128)),
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 
@@ -707,7 +709,7 @@ mod tests {
             (Witness(3), FieldElement::from(3u128)),
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_err());
     }
 
@@ -728,7 +730,7 @@ mod tests {
             (Witness(2), FieldElement::from(2u128)),
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_err());
     }
 
@@ -753,7 +755,7 @@ mod tests {
         let witness_map =
             WitnessMap::from(BTreeMap::from_iter([(Witness(4), FieldElement::zero())]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 
@@ -781,7 +783,7 @@ mod tests {
             (Witness(3), FieldElement::from(42u128)), // Should match value at index 0
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 
@@ -807,7 +809,7 @@ mod tests {
             (Witness(3), FieldElement::from(99u128)), // Wrong! Should be 42
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_err());
     }
 
@@ -838,7 +840,7 @@ mod tests {
             (Witness(4), FieldElement::from(100u128)), // Read should get written value
         ]));
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 
@@ -862,7 +864,7 @@ mod tests {
         // Empty witness map
         let witness_map = WitnessMap::default();
 
-        let backend = Bn254BlackBoxSolver;
+        let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 }

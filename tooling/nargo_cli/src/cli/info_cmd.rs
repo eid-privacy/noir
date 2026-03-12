@@ -1,4 +1,4 @@
-use bn254_blackbox_solver::Bn254BlackBoxSolver;
+// use bn254_blackbox_solver::Bn254BlackBoxSolver;
 use clap::Args;
 use nargo::{
     constants::PROVER_INPUT_FILE, foreign_calls::DefaultForeignCallBuilder, package::Package,
@@ -12,7 +12,7 @@ use noirc_artifacts_info::{
 };
 use noirc_driver::CompileOptions;
 use rayon::prelude::*;
-
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use crate::errors::CliError;
 
 use super::{LockType, PackageOptions, WorkspaceCommand, compile_cmd::compile_workspace_full};
@@ -117,7 +117,8 @@ fn profile_brillig_execution(
         let (_, profiling_samples) = nargo::ops::execute_program_with_profiling(
             &program_artifact.bytecode,
             initial_witness,
-            &Bn254BlackBoxSolver,
+            // &Bn254BlackBoxSolver,
+            &StubbedBlackBoxSolver,
             &mut DefaultForeignCallBuilder::default().build(),
         )
         .map_err(|e| {
