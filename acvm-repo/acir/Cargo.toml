@@ -53,7 +53,8 @@ acir = { path = ".", features = ["arb"] } # Self to turn on `arb`.
 default = []
 bn254 = ["acir_field/bn254"]
 bls12_381 = ["acir_field/bls12_381"]
-p256 = ["acir_field/secp256r1"]
+p256 = ["acir_field/p256"]
+t256 = ["acir_field/t256"]
 arb = ["proptest", "proptest-derive", "brillig/arb"]
 
 [lib]

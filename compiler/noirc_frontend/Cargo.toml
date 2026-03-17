@@ -47,4 +47,6 @@ test-case.workspace = true
 [features]
 bn254 = []
 bls12_381 = []
+p256 = []
+t256 = []
 test_utils = []
