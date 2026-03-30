@@ -42,6 +42,8 @@ dependencies = [
  "ark-bls12-381",
  "ark-bn254 0.5.0",
  "ark-ff 0.5.0",
+ "ark-secp256r1",
+ "ark-tom256",
  "cfg-if",
  "criterion",
  "hex",
@@ -505,6 +507,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "ark-secp256r1"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5cf8be5820de567729bfa73a410ddd07cec8ad102d9a4bf61fd6b2e60db264e8"
+dependencies = [
+ "ark-ec 0.5.0",
+ "ark-ff 0.5.0",
+ "ark-std 0.5.0",
+]
+
+[[package]]
 name = "ark-serialize"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -569,6 +582,17 @@ checksum = "246a225cc6131e9ee4f24619af0f19d67761fff15d7ccc22e42b80846e69449a"
 dependencies = [
  "num-traits",
  "rand 0.8.5",
+]
+
+[[package]]
+name = "ark-tom256"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "187f16953757776d81c53d6ba4207a68312eca669b615337cceefb7582604546"
+dependencies = [
+ "ark-ec 0.5.0",
+ "ark-ff 0.5.0",
+ "ark-std 0.5.0",
 ]
 
 [[package]]
@@ -3357,12 +3381,12 @@ name = "nargo_cli"
 version = "1.0.0-beta.20"
 dependencies = [
  "acvm",
+ "acvm_blackbox_solver",
  "ark-bn254 0.5.0",
  "assert_cmd",
  "assert_fs",
  "async-lsp",
  "base64",
- "bn254_blackbox_solver",
  "build-data",
  "clap",
  "clap-markdown",

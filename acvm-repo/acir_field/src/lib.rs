@@ -1,5 +1,5 @@
 #![forbid(unsafe_code)]
-#![cfg_attr(not(test), warn(unused_crate_dependencies, unused_extern_crates))]
+#![cfg_attr(not(test), warn(unused_extern_crates))]
 
 mod field_element;
 mod generic_ark;
