@@ -34,6 +34,7 @@ tracing-subscriber.workspace = true
 acir = {workspace = true, features = ["t256"] }
 acvm = {workspace = true, features = ["t256"] }
 bn254_blackbox_solver.workspace = true
+t256_blackbox_solver.workspace = true
 fm.workspace = true
 nargo = { workspace = true, features = ["rpc"] }
 noirc_abi = { workspace = true, features = ["t256"] }

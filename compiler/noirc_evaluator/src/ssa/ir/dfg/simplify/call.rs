@@ -602,8 +602,9 @@ fn simplify_black_box_func(
 ) -> SimplifyResult {
     cfg_if::cfg_if! {
         if #[cfg(feature = "bn254")] {
-            // let solver = bn254_blackbox_solver::Bn254BlackBoxSolver;
-            let solver = StubbedBlackBoxSolver;
+            let solver = bn254_blackbox_solver::Bn254BlackBoxSolver;
+        } else if #[cfg(feature = "t256")] {
+            let solver = t256_blackbox_solver::T256BlackboxSolver;
         } else {
             let solver = acvm::blackbox_solver::StubbedBlackBoxSolver;
         }

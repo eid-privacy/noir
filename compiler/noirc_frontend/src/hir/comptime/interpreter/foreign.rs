@@ -3,11 +3,9 @@
 use acvm::{
     AcirField, BlackBoxResolutionError, FieldElement, blackbox_solver::BlackBoxFunctionSolver,
 };
-use bn254_blackbox_solver::Bn254BlackBoxSolver; // Currently locked to only bn254!
 use im::{Vector, vector};
-use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use noirc_errors::Location;
-
+use t256_blackbox_solver::T256BlackboxSolver;
 use crate::{
     Type,
     hir::comptime::{
@@ -169,7 +167,7 @@ fn embedded_curve_add(
     let p2inf: FieldElement =
         if p2x.is_zero() && p2y.is_zero() { FieldElement::one() } else { FieldElement::zero() };
 
-    let (x, y, _inf) = StubbedBlackBoxSolver
+    let (x, y, _inf) = T256BlackboxSolver
         .ec_add(
             &p1x, &p1y, &p1inf, &p2x, &p2y, &p2inf,
             true, // Predicate is always true as interpreter has control flow to handle false case
@@ -212,7 +210,7 @@ fn multi_scalar_mul(
         scalars_hi.push(hi);
     }
 
-    let (x, y, _inf) = StubbedBlackBoxSolver
+    let (x, y, _inf) = T256BlackboxSolver
         .multi_scalar_mul(
             &points,
             &scalars_lo,
@@ -241,7 +239,7 @@ fn poseidon2_permutation(arguments: Vec<(Value, Location)>, location: Location) 
 
     let (input, typ) = get_array_map(input, get_field)?;
 
-    let fields = StubbedBlackBoxSolver
+    let fields = T256BlackboxSolver
         .poseidon2_permutation(&input)
         .map_err(|error| InterpreterError::BlackBoxError(error, location))?;
 

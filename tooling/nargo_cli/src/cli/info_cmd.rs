@@ -12,7 +12,7 @@ use noirc_artifacts_info::{
 };
 use noirc_driver::CompileOptions;
 use rayon::prelude::*;
-use acvm::blackbox_solver::StubbedBlackBoxSolver;
+use t256_blackbox_solver::T256BlackboxSolver;
 use crate::errors::CliError;
 
 use super::{LockType, PackageOptions, WorkspaceCommand, compile_cmd::compile_workspace_full};
@@ -118,7 +118,8 @@ fn profile_brillig_execution(
             &program_artifact.bytecode,
             initial_witness,
             // &Bn254BlackBoxSolver,
-            &StubbedBlackBoxSolver,
+            // &StubbedBlackBoxSolver,
+            &T256BlackboxSolver,
             &mut DefaultForeignCallBuilder::default().build(),
         )
         .map_err(|e| {

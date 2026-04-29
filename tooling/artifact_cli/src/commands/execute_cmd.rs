@@ -1,8 +1,6 @@
 use std::path::PathBuf;
 
-use bn254_blackbox_solver::Bn254BlackBoxSolver;
 use clap::Args;
-use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use noirc_artifacts::program::CompiledProgram;
 
 use crate::{
@@ -13,7 +11,7 @@ use crate::{
 use nargo::foreign_calls::{
     DefaultForeignCallBuilder, layers, transcript::ReplayForeignCallExecutor,
 };
-
+use t256_blackbox_solver::T256BlackboxSolver;
 use super::parse_and_normalize_path;
 
 /// Execute a binary program or a circuit artifact.
@@ -136,7 +134,7 @@ fn execute(circuit: &CompiledProgram, args: &ExecuteCommand) -> Result<Execution
     .build_with_base(transcript_executor);
 
     // let blackbox_solver = Bn254BlackBoxSolver;
-    let blackbox_solver = StubbedBlackBoxSolver;
-
+    // let blackbox_solver = StubbedBlackBoxSolver;
+    let blackbox_solver = T256BlackboxSolver;
     execution::execute(circuit, &blackbox_solver, &mut foreign_call_executor, &args.prover_file)
 }

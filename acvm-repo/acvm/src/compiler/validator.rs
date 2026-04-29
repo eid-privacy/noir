@@ -489,7 +489,6 @@ mod tests {
         ]));
 
         let backend = StubbedBlackBoxSolver;
-        // let backend = StubbedBlackBoxSolver;
         assert!(validate_witness(&backend, witness_map, &circuit).is_ok());
     }
 

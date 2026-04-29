@@ -13,7 +13,7 @@ use acvm::{
 };
 use acvm::blackbox_solver::StubbedBlackBoxSolver;
 use bn254_blackbox_solver::Bn254BlackBoxSolver;
-
+use t256_blackbox_solver::T256BlackboxSolver;
 use crate::{
     brillig::{
         Brillig, BrilligOptions,
@@ -75,7 +75,8 @@ fn execute_bytecode(
     calldata: Vec<FieldElement>,
 ) -> Vec<FieldElement> {
     // let solver = Bn254BlackBoxSolver;
-    let solver = StubbedBlackBoxSolver;
+    // let solver = StubbedBlackBoxSolver;
+    let solver = T256BlackboxSolver;
     let mut vm = VM::new(calldata, byte_code, &solver, false, None);
     let status = vm.process_opcodes();
     match status {

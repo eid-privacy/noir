@@ -31,7 +31,9 @@ cfg_if::cfg_if! {
     } else if #[cfg(feature = "p256")] {
         pub type FieldElement = field_element::FieldElement<ark_secp256r1::Fr>;
     } else if #[cfg(feature = "t256")] {
-        pub type FieldElement = field_element::FieldElement<ark_tom256::Fr>;
+        // mind trick here: we need wires to hold values that are convenient
+        // to do computation in the field that holds P-256 points coordinates -> Fq
+        pub type FieldElement = field_element::FieldElement<ark_tom256::Fq>;
     } else {
         pub type FieldElement = field_element::FieldElement<ark_bn254::Fr>;
     }

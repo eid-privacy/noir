@@ -111,6 +111,7 @@ dependencies = [
  "noir_artifact_cli",
  "proptest",
  "rand 0.10.1",
+ "t256_blackbox_solver",
  "toml",
  "tracing-appender",
  "tracing-subscriber",
@@ -131,6 +132,7 @@ dependencies = [
  "gloo-utils",
  "js-sys",
  "serde",
+ "t256_blackbox_solver",
  "tracing-subscriber",
  "tracing-web",
  "wasm-bindgen",
@@ -586,9 +588,7 @@ dependencies = [
 
 [[package]]
 name = "ark-tom256"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "187f16953757776d81c53d6ba4207a68312eca669b615337cceefb7582604546"
+version = "0.1.0"
 dependencies = [
  "ark-ec 0.5.0",
  "ark-ff 0.5.0",
@@ -3431,6 +3431,7 @@ dependencies = [
  "sha2 0.11.0",
  "similar 3.0.0",
  "similar-asserts",
+ "t256_blackbox_solver",
  "tempfile",
  "termcolor",
  "termion",
@@ -3577,6 +3578,7 @@ dependencies = [
  "noirc_printable_type",
  "serde",
  "serde_json",
+ "t256_blackbox_solver",
  "thiserror 2.0.18",
  "toml",
  "tracing-subscriber",
@@ -3612,6 +3614,7 @@ dependencies = [
  "serde_json",
  "similar-asserts",
  "strum",
+ "t256_blackbox_solver",
 ]
 
 [[package]]
@@ -3638,7 +3641,6 @@ version = "1.0.0-beta.20"
 dependencies = [
  "acvm",
  "assert_cmd",
- "bn254_blackbox_solver",
  "build-data",
  "codespan-reporting",
  "dap",
@@ -3650,6 +3652,7 @@ dependencies = [
  "noirc_printable_type",
  "owo-colors",
  "rexpect",
+ "t256_blackbox_solver",
  "tempfile",
  "thiserror 2.0.18",
 ]
@@ -3692,6 +3695,7 @@ dependencies = [
  "predicates",
  "serde",
  "serde_json",
+ "t256_blackbox_solver",
 ]
 
 [[package]]
@@ -3749,6 +3753,7 @@ dependencies = [
  "rustc-hash",
  "serde",
  "serde_json",
+ "t256_blackbox_solver",
  "tempfile",
  "thiserror 2.0.18",
  "tracing-appender",
@@ -3791,6 +3796,7 @@ dependencies = [
  "noirc_errors",
  "noirc_evaluator",
  "noirc_frontend",
+ "t256_blackbox_solver",
  "thiserror 2.0.18",
 ]
 
@@ -3960,6 +3966,7 @@ dependencies = [
  "insta",
  "iter-extended",
  "itertools 0.14.0",
+ "log",
  "noirc_artifacts",
  "noirc_errors",
  "noirc_frontend",
@@ -3977,6 +3984,7 @@ dependencies = [
  "serde_with",
  "similar-asserts",
  "smallvec",
+ "t256_blackbox_solver",
  "test-case",
  "thiserror 2.0.18",
  "tracing",
@@ -4013,6 +4021,7 @@ dependencies = [
  "smol_str",
  "strum",
  "strum_macros",
+ "t256_blackbox_solver",
  "test-case",
  "thiserror 2.0.18",
  "tracing",
@@ -5967,6 +5976,24 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.117",
+]
+
+[[package]]
+name = "t256_blackbox_solver"
+version = "1.0.0-beta.20"
+dependencies = [
+ "acir",
+ "acvm_blackbox_solver",
+ "ark-ec 0.5.0",
+ "ark-ff 0.5.0",
+ "ark-tom256",
+ "criterion",
+ "hex",
+ "itertools 0.14.0",
+ "num-bigint",
+ "pprof",
+ "proptest",
+ "zkhash",
 ]
 
 [[package]]
