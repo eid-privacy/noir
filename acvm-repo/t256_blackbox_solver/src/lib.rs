@@ -4,8 +4,7 @@ mod poseidon2;
 mod poseidon2_constants;
 
 use ark_ec::{AffineRepr, CurveGroup, VariableBaseMSM};
-use ark_ff::{BigInt, MontConfig, Zero};
-use ark_tom256::Affine;
+use ark_ff::{BigInt, MontConfig, PrimeField, Zero};
 use acir::{AcirField, BlackBoxFunc};
 use acvm_blackbox_solver::{BlackBoxFunctionSolver, BlackBoxResolutionError};
 
@@ -19,12 +18,14 @@ impl T256BlackboxSolver {
         x: FieldElement,
         y: FieldElement,
         is_infinite: FieldElement
-    ) -> Result<ark_tom256::Projective, BlackBoxResolutionError> {
+    ) -> Result<ark_secp256r1::Projective, BlackBoxResolutionError> {
         Ok(
             if is_infinite.is_one() {
-                ark_tom256::Projective::zero()
+                ark_secp256r1::Projective::zero()
             } else {
-                let p1 = Affine::new_unchecked(x.into_repr(), y.into_repr());
+                let p1 = ark_secp256r1::Affine::new_unchecked(
+                    ark_secp256r1::Fq::new(x.into_repr().into_bigint()),
+                    ark_secp256r1::Fq::new(y.into_repr().into_bigint()));
                 if !p1.is_on_curve() {
                     return Err(BlackBoxResolutionError::Failed(
                         BlackBoxFunc::EmbeddedCurveAdd,
@@ -45,7 +46,7 @@ impl T256BlackboxSolver {
                         ),
                     ));
                 }
-                ark_tom256::Projective::from(p1)
+                ark_secp256r1::Projective::from(p1)
             }
         )
     }
@@ -55,7 +56,7 @@ impl T256BlackboxSolver {
         points: &[FieldElement],
         scalars_lo: &[FieldElement],
         scalars_hi: &[FieldElement],
-    ) -> Result<(Vec<Affine>, Vec<BigInt<4>>), BlackBoxResolutionError>{
+    ) -> Result<(Vec<ark_secp256r1::Affine>, Vec<BigInt<4>>), BlackBoxResolutionError>{
         if points.len() != 3 * scalars_lo.len() || scalars_lo.len() != scalars_hi.len() {
             return Err(BlackBoxResolutionError::Failed(
                 BlackBoxFunc::MultiScalarMul,
@@ -94,8 +95,8 @@ impl T256BlackboxSolver {
             ];
             let scalar_bigint = BigInt::new(limbs_array);
 
-            // Check if this is smaller than the grumpkin modulus
-            if scalar_bigint >= ark_tom256::FrConfig::MODULUS {
+            // Check if this is smaller than the P256 modulus
+            if scalar_bigint >= ark_secp256r1::FrConfig::MODULUS {
                 // Format as hex string (big-endian, most significant limb first)
                 let hex_str = format!(
                     "{:016x}{:016x}{:016x}{:016x}",
@@ -146,14 +147,17 @@ impl BlackBoxFunctionSolver<FieldElement> for T256BlackboxSolver {
 
         let (points, scalars) = Self::parse_msm_inputs(points, scalars_lo, scalars_hi)?;
 
-        let msm_result = Affine::from(
-            ark_tom256::Projective::msm_bigint(&points, &scalars)
+        let msm_result = ark_secp256r1::Affine::from(
+            ark_secp256r1::Projective::msm_bigint(
+                &points,
+                &scalars
+            )
         );
 
         if let Some((out_x, out_y)) = msm_result.xy() {
             Ok((
-                FieldElement::from_repr(out_x),
-                FieldElement::from_repr(out_y),
+                FieldElement::from_repr(ark_tom256::Fq::from_bigint(out_x.into_bigint()).unwrap()),
+                FieldElement::from_repr(ark_tom256::Fq::from_bigint(out_y.into_bigint()).unwrap()),
                 FieldElement::from(u128::from(msm_result.is_zero())),
             ))
         } else {
@@ -184,9 +188,15 @@ impl BlackBoxFunctionSolver<FieldElement> for T256BlackboxSolver {
         let p1 = T256BlackboxSolver::coordinates_to_projective(*input1_x, *input1_y, *input1_infinite)?;
         let p2 = T256BlackboxSolver::coordinates_to_projective(*input2_x, *input2_y, *input2_infinite)?;
 
-        let sum = Affine::from(p1 + p2);
+        let sum = ark_secp256r1::Affine::from(p1 + p2);
         if let Some((x, y)) = sum.xy() {
-            Ok((FieldElement::from_repr(x), FieldElement::from_repr(y), FieldElement::zero()))
+            Ok(
+                (
+                    FieldElement::from_repr(ark_tom256::Fq::from_bigint(x.into_bigint()).unwrap()),
+                    FieldElement::from_repr(ark_tom256::Fq::from_bigint(y.into_bigint()).unwrap()),
+                    FieldElement::zero()
+                )
+            )
         } else {
             Ok((FieldElement::zero(), FieldElement::zero(), FieldElement::one()))
         }

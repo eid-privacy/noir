@@ -35,7 +35,7 @@ criterion.workspace = true
 bn254 = []
 bls12_381 = ["dep:ark-bls12-381"]
 p256 = ["dep:ark-secp256r1"]
-t256 = ["dep:ark-tom256"]
+t256 = ["dep:ark-tom256", "dep:ark-secp256r1"]
 
 [[bench]]
 name = "field_element"
