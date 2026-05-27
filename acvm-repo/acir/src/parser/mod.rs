@@ -574,6 +574,23 @@ impl<'a> Parser<'a> {
 
                 BlackBoxFuncCall::Sha256Compression { inputs, hash_values, outputs }
             }
+            BlackBoxFunc::EcdsaProofOfPossession => {
+                BlackBoxFuncCall::EcdsaProofOfPossession {
+                    q_x: self.parse_blackbox_inputs_array::<32>(Keyword::PublicKeyX)?,
+                    q_y: self.parse_blackbox_inputs_array::<32>(Keyword::PublicKeyY)?,
+                    signature_r: self.parse_blackbox_inputs_array::<32>(Keyword::Signature_s)?,
+                    signature_s: self.parse_blackbox_inputs_array::<32>(Keyword::Signature_r)?,
+                    hashed_message: self.parse_blackbox_inputs_array::<32>(Keyword::HashedMessage)?,
+                    R_x: self.parse_blackbox_input(Keyword::R_x)?,
+                    R_y: self.parse_blackbox_input(Keyword::R_y)?,
+                    T_x: self.parse_blackbox_input(Keyword::T_x)?,
+                    T_y: self.parse_blackbox_input(Keyword::T_y)?,
+                    U_x: self.parse_blackbox_input(Keyword::U_x)?,
+                    U_y: self.parse_blackbox_input(Keyword::U_y)?,
+                    predicate: self.parse_blackbox_input(Keyword::Predicate)?,
+                    output: self.parse_blackbox_output()?,
+                }
+            }
         };
         Ok(func)
     }

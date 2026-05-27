@@ -18,6 +18,7 @@ fn format_blackbox_function<F: AcirField>(call: &BlackBoxFuncCall<F>) -> String 
         BlackBoxFuncCall::RecursiveAggregation { .. } => "recursive_aggregation".to_string(),
         BlackBoxFuncCall::Poseidon2Permutation { .. } => "poseidon2_permutation".to_string(),
         BlackBoxFuncCall::Sha256Compression { .. } => "sha256_compression".to_string(),
+        BlackBoxFuncCall::EcdsaProofOfPossession { .. } => "ecdsa_proof_of_possession".to_string(),
     }
 }
 

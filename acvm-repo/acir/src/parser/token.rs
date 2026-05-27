@@ -178,6 +178,15 @@ pub(crate) enum Keyword {
     ProofType,
     /// hash_values
     HashValues,
+    /// Values for special PoP
+    Signature_r,
+    Signature_s,
+    R_x,
+    R_y,
+    T_x,
+    T_y,
+    U_x,
+    U_y,
 }
 
 impl Keyword {
@@ -272,6 +281,14 @@ impl std::fmt::Display for Keyword {
             Keyword::KeyHash => write!(f, "key_hash"),
             Keyword::ProofType => write!(f, "proof_type"),
             Keyword::HashValues => write!(f, "hash_values"),
+            Keyword::Signature_r => write!(f, "signature_r"),
+            Keyword::Signature_s => write!(f, "signature_s"),
+            Keyword::R_x => write!(f, "R_x"),
+            Keyword::R_y => write!(f, "R_y"),
+            Keyword::T_x => write!(f, "T_x"),
+            Keyword::T_y => write!(f, "T_y"),
+            Keyword::U_x => write!(f, "U_x"),
+            Keyword::U_y => write!(f, "U_y"),
         }
     }
 }

@@ -278,6 +278,21 @@ pub enum BlackBoxFuncCall<F> {
         /// Output of the compression, represented by 8 u32s
         outputs: Box<[Witness; 8]>,
     },
+    EcdsaProofOfPossession {
+        q_x: Box<[FunctionInput<F>; 32]>,
+        q_y: Box<[FunctionInput<F>; 32]>,
+        signature_r: Box<[FunctionInput<F>; 32]>,
+        signature_s: Box<[FunctionInput<F>; 32]>,
+        hashed_message: Box<[FunctionInput<F>; 32]>,
+        R_x: FunctionInput<F>,
+        R_y: FunctionInput<F>,
+        T_x: FunctionInput<F>,
+        T_y: FunctionInput<F>,
+        U_x: FunctionInput<F>,
+        U_y: FunctionInput<F>,
+        predicate: FunctionInput<F>,
+        output: Witness,
+    },
 }
 
 impl<F> BlackBoxFuncCall<F> {
@@ -297,6 +312,7 @@ impl<F> BlackBoxFuncCall<F> {
             BlackBoxFuncCall::RecursiveAggregation { .. } => BlackBoxFunc::RecursiveAggregation,
             BlackBoxFuncCall::Poseidon2Permutation { .. } => BlackBoxFunc::Poseidon2Permutation,
             BlackBoxFuncCall::Sha256Compression { .. } => BlackBoxFunc::Sha256Compression,
+            BlackBoxFuncCall::EcdsaProofOfPossession { .. } => BlackBoxFunc::EcdsaProofOfPossession,
         }
     }
 
@@ -335,7 +351,8 @@ impl<F> BlackBoxFuncCall<F> {
             }
             BlackBoxFuncCall::RANGE { .. } | BlackBoxFuncCall::RecursiveAggregation { .. } => {
                 vec![]
-            }
+            },
+            BlackBoxFuncCall::EcdsaProofOfPossession { output , .. } => vec![*output],
         }
     }
 }
@@ -404,6 +421,33 @@ impl<F: Copy + AcirField> BlackBoxFuncCall<F> {
                 proof_type: _,
                 predicate,
             } => [key.as_slice(), proof, public_inputs, &[*key_hash], &[*predicate]].concat(),
+            BlackBoxFuncCall::EcdsaProofOfPossession {
+                q_x,
+                q_y,
+                signature_r,
+                signature_s,
+                hashed_message,
+                R_x,
+                R_y,
+                T_x,
+                T_y,
+                U_x,
+                U_y,
+                predicate: _,
+                output: _,
+            } => [
+                q_x.as_slice(),
+                q_y.as_slice(),
+                signature_r.as_slice(),
+                signature_s.as_slice(),
+                hashed_message.as_slice(),
+                &[*R_x],
+                &[*R_y],
+                &[*T_x],
+                &[*T_y],
+                &[*U_x],
+                &[*U_y],
+            ].concat(),
         }
     }
 
@@ -432,7 +476,8 @@ impl<F: Copy + AcirField> BlackBoxFuncCall<F> {
             | BlackBoxFuncCall::EcdsaSecp256r1 { predicate, .. }
             | BlackBoxFuncCall::MultiScalarMul { predicate, .. }
             | BlackBoxFuncCall::EmbeddedCurveAdd { predicate, .. }
-            | BlackBoxFuncCall::RecursiveAggregation { predicate, .. } => *predicate,
+            | BlackBoxFuncCall::RecursiveAggregation { predicate, .. }
+            | BlackBoxFuncCall::EcdsaProofOfPossession { predicate, .. }=> *predicate,
         };
         if predicate.is_constant() { None } else { Some(predicate.to_witness()) }
     }
@@ -538,7 +583,25 @@ impl<F: std::fmt::Display + Copy> std::fmt::Display for BlackBoxFuncCall<F> {
                 let hash_values = slice_to_string(&hash_values.to_vec());
                 let outputs = slice_to_string(&outputs.to_vec());
                 write!(f, "inputs: {inputs}, hash_values: {hash_values}, outputs: {outputs}")?;
-            }
+            },
+            BlackBoxFuncCall::EcdsaProofOfPossession {
+                q_x,
+                q_y,
+                signature_r,
+                signature_s,
+                hashed_message,
+                R_x,
+                R_y,
+                T_x,
+                T_y,
+                U_x,
+                U_y,
+                predicate,
+                output,
+            } => {
+                // TODO: do
+                write!(f, "TODO")?;
+            },
         }
 
         Ok(())
@@ -622,8 +685,6 @@ mod arb {
         F: AcirField + Arbitrary,
     {
         type Parameters = ();
-        type Strategy = BoxedStrategy<Self>;
-
         fn arbitrary_with(_args: Self::Parameters) -> Self::Strategy {
             let input = any::<FunctionInput<F>>();
             let input_vec = any::<Vec<FunctionInput<F>>>();
@@ -815,5 +876,7 @@ mod arb {
             ]
             .boxed()
         }
+
+        type Strategy = BoxedStrategy<Self>;
     }
 }

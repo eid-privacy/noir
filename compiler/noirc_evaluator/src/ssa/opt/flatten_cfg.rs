@@ -1158,6 +1158,11 @@ impl<'f> Context<'f> {
                 arguments
             }
 
+            BlackBoxFunc::EcdsaProofOfPossession => {
+                arguments[11] = self.mul_by_condition(arguments[11], condition, call_stack);
+                arguments
+            }
+
             // The predicate is injected in ACIRgen so no modification is needed here.
             BlackBoxFunc::RecursiveAggregation => arguments,
 

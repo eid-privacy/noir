@@ -5986,6 +5986,7 @@ dependencies = [
  "acvm_blackbox_solver",
  "ark-ec 0.5.0",
  "ark-ff 0.5.0",
+ "ark-secp256r1",
  "ark-tom256",
  "criterion",
  "hex",

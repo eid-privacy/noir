@@ -361,6 +361,8 @@ pub fn validate_witness<F: AcirField>(
                             }
                         }
                     }
+                    // TODO: check if need to do or not
+                    BlackBoxFuncCall::EcdsaProofOfPossession { .. } => {}
                 }
             }
             Opcode::MemoryOp { block_id, op } => {

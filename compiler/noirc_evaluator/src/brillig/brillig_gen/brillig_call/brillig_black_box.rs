@@ -266,6 +266,11 @@ pub(crate) fn convert_black_box_call<F: AcirField + DebugToString, Registers: Re
             } else {
                 unreachable!("ICE: AES128Encrypt expects three array arguments, one array result")
             }
+
         }
+        BlackBoxFunc::EcdsaProofOfPossession => {
+            // TODO: do?
+            todo!()
+        },
     }
 }

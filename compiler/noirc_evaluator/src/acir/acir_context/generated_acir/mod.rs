@@ -359,6 +359,49 @@ impl<F: AcirField> GeneratedAcir<F> {
                     outputs: expect_into(outputs),
                 }
             }
+            BlackBoxFunc::EcdsaProofOfPossession => {
+                let [
+                    q_x,
+                    q_y,
+                    signature_r,
+                    signature_s,
+                    hashed_message,
+                    R_x,
+                    R_y,
+                    T_x,
+                    T_y,
+                    U_x,
+                    U_y,
+                    predicate,
+                ] = expect_into(function_inputs);
+                let [output] = expect_into(outputs);
+
+                // TODO: revisit this ugly stuff
+                let [R_x] = expect_into(R_x);
+                let [R_y] = expect_into(R_y);
+                let [T_x] = expect_into(T_x);
+                let [T_y] = expect_into(T_y);
+                let [U_x] = expect_into(U_x);
+                let [U_y] = expect_into(U_y);
+
+                let [predicate] = expect_into(predicate);
+
+                BlackBoxFuncCall::EcdsaProofOfPossession {
+                    q_x: expect_into(q_x),
+                    q_y: expect_into(q_y),
+                    signature_r: expect_into(signature_r),
+                    signature_s: expect_into(signature_s),
+                    hashed_message: expect_into(hashed_message),
+                    R_x: expect_into(R_x),
+                    R_y: expect_into(R_y),
+                    T_x: expect_into(T_x),
+                    T_y: expect_into(T_y),
+                    U_x: expect_into(U_x),
+                    U_y: expect_into(U_y),
+                    predicate: expect_into(predicate),
+                    output: expect_into(output),
+                }
+            }
         };
 
         self.push_opcode(AcirOpcode::BlackBoxFuncCall(black_box_func_call));
@@ -740,6 +783,7 @@ fn black_box_func_expected_input_size(name: BlackBoxFunc) -> Option<usize> {
         // Addition over the embedded curve: input are coordinates (x1,y1,infinite1) and (x2,y2,infinite2) of the Grumpkin points
         // to add, plus a predicate to conditionally perform the addition.
         BlackBoxFunc::EmbeddedCurveAdd => Some(7),
+        BlackBoxFunc::EcdsaProofOfPossession => Some(11),
     }
 }
 
@@ -774,6 +818,7 @@ fn black_box_expected_output_size(name: BlackBoxFunc) -> Option<usize> {
 
         // AES encryption returns a variable number of outputs
         BlackBoxFunc::AES128Encrypt => None,
+        BlackBoxFunc::EcdsaProofOfPossession => Some(1),
     }
 }
 

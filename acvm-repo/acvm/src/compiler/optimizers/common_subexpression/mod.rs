@@ -466,6 +466,35 @@ where
                 self.fold_inputs(hash_values.as_slice());
                 self.fold_many(outputs.iter());
             }
+            BlackBoxFuncCall::EcdsaProofOfPossession {
+                q_x,
+                q_y,
+                signature_r,
+                signature_s,
+                hashed_message,
+                R_x,
+                R_y,
+                T_x,
+                T_y,
+                U_x,
+                U_y,
+                output,
+                predicate,
+            } => {
+                self.fold_inputs(q_x.as_slice());
+                self.fold_inputs(q_y.as_slice());
+                self.fold_inputs(signature_r.as_slice());
+                self.fold_inputs(signature_s.as_slice());
+                self.fold_inputs(hashed_message.as_slice());
+                self.fold_input(R_x);
+                self.fold_input(R_y);
+                self.fold_input(T_x);
+                self.fold_input(T_y);
+                self.fold_input(U_x);
+                self.fold_input(U_y);
+                self.fold(*output);
+                self.fold_input(predicate);
+            }
         }
     }
 

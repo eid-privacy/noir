@@ -902,6 +902,26 @@ impl<'f> Validator<'f> {
                 let result_length = assert_u32_array(&result_type, "sha256_compression result");
                 assert_array_length(result_length, 8, "sha256_compression result");
             }
+            BlackBoxFunc::EcdsaProofOfPossession => {
+                // fn ecdsa_proof_of_possession(
+                // q_x: [u8, 32],
+                // q_y: [u8; 32],
+                // signature_r: [u8; 32],
+                // signature_s: [u8:32],
+                // message_hash: [u8; 32],
+                // R_x: Field,
+                // R_y: Field,
+                // T_x: Field,
+                // T_y: Field,
+                // U_x: Field,
+                // U_y: Field,
+                // ) -> bool
+                assert_arguments_length(arguments, 11, "ecdsa_proof_of_possession");
+
+                // TODO: implement real checks if this blackbox ever works
+
+                self.assert_one_result(instruction, "ecdsa_proof_of_possession");
+            }
         }
     }
 

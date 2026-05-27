@@ -40,6 +40,8 @@ pub enum BlackBoxFunc {
     Poseidon2Permutation,
     /// More details can be found at [crate::circuit::opcodes::BlackBoxFuncCall::Sha256Compression]
     Sha256Compression,
+    /// Custom opcode for verification of ECDSA proof of possession
+    EcdsaProofOfPossession,
 }
 
 impl std::fmt::Display for BlackBoxFunc {
@@ -65,6 +67,7 @@ impl BlackBoxFunc {
             BlackBoxFunc::EcdsaSecp256r1 => "ecdsa_secp256r1",
             BlackBoxFunc::Poseidon2Permutation => "poseidon2_permutation",
             BlackBoxFunc::Sha256Compression => "sha256_compression",
+            BlackBoxFunc::EcdsaProofOfPossession => "ecdsa_proof_of_possession",
         }
     }
 
@@ -104,7 +107,8 @@ impl BlackBoxFunc {
             | BlackBoxFunc::Blake3
             | BlackBoxFunc::Keccakf1600
             | BlackBoxFunc::Poseidon2Permutation
-            | BlackBoxFunc::Sha256Compression => false,
+            | BlackBoxFunc::Sha256Compression
+            | BlackBoxFunc::EcdsaProofOfPossession => false,
         }
     }
 }

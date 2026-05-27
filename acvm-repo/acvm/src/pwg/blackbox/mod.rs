@@ -156,6 +156,9 @@ pub(crate) fn solve<F: AcirField>(
         }
         BlackBoxFuncCall::Poseidon2Permutation { inputs, outputs } => {
             solve_poseidon2_permutation_opcode(backend, initial_witness, inputs, outputs)
-        }
+        },
+        BlackBoxFuncCall::EcdsaProofOfPossession { .. } => {
+            todo!("Not implemented: Ecdsa proof of possession")
+        },
     }
 }

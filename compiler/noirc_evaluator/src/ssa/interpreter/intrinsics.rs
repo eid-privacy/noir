@@ -408,6 +408,10 @@ impl<W: Write> Interpreter<'_, W> {
                     let result = Value::array_from_iter(result, NumericType::unsigned(32))?;
                     Ok(vec![result])
                 }
+                acvm::acir::BlackBoxFunc::EcdsaProofOfPossession => {
+                    // TODO: check if needs doing
+                    Ok(vec![Value::bool(false)])
+                }
             },
             Intrinsic::Hint(_) => self.lookup_all(args),
             Intrinsic::IsUnconstrained => {

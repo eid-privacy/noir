@@ -695,6 +695,7 @@ fn simplify_black_box_func(
             blackbox::simplify_sha256_compression(dfg, arguments, block, call_stack)
         }
         BlackBoxFunc::AES128Encrypt => SimplifyResult::None,
+        BlackBoxFunc::EcdsaProofOfPossession => SimplifyResult::None,
     }
 }
 
