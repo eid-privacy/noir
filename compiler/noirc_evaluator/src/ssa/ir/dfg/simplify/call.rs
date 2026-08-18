@@ -1,17 +1,6 @@
 use noirc_errors::call_stack::CallStackId;
 use std::{collections::VecDeque, sync::Arc};
 
-use acvm::{
-    AcirField as _, FieldElement,
-    acir::{
-        BlackBoxFunc,
-        brillig::lengths::{ElementTypesLength, SemanticLength, SemiFlattenedLength},
-    },
-};
-use bn254_blackbox_solver::derive_generators;
-use iter_extended::vecmap;
-use num_bigint::BigUint;
-
 use crate::{
     brillig::assert_u32,
     ssa::ir::{
@@ -23,6 +12,19 @@ use crate::{
         value::{Value, ValueId},
     },
 };
+use ark_ff::{BigInteger, PrimeField};
+
+use acvm::blackbox_solver::StubbedBlackBoxSolver;
+use acvm::{
+    AcirField as _, FieldElement,
+    acir::{
+        BlackBoxFunc,
+        brillig::lengths::{ElementTypesLength, SemanticLength, SemiFlattenedLength},
+    },
+};
+use bn254_blackbox_solver::derive_generators;
+use iter_extended::vecmap;
+use num_bigint::BigUint;
 
 use super::SimplifyResult;
 use super::bail_malformed;
@@ -869,6 +871,8 @@ fn simplify_black_box_func(
     cfg_if::cfg_if! {
         if #[cfg(feature = "bn254")] {
             let solver = bn254_blackbox_solver::Bn254BlackBoxSolver;
+        } else if #[cfg(feature = "t256")] {
+            let solver = t256_blackbox_solver::T256BlackboxSolver;
         } else {
             let solver = acvm::blackbox_solver::StubbedBlackBoxSolver;
         }
@@ -1020,8 +1024,10 @@ fn simplify_derive_generators(
                 derive_generators(&domain_separator_bytes, num_generators, starting_index);
             let mut results = Vec::new();
             for generator in generators {
-                let x = FieldElement::from_repr(generator.x);
-                let y = FieldElement::from_repr(generator.y);
+                let x =
+                    FieldElement::from_be_bytes_reduce(&generator.x.into_bigint().to_bytes_be());
+                let y =
+                    FieldElement::from_be_bytes_reduce(&generator.y.into_bigint().to_bytes_be());
                 results.push(dfg.make_constant(x, NumericType::NativeField));
                 results.push(dfg.make_constant(y, NumericType::NativeField));
             }
