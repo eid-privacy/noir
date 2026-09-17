@@ -5,8 +5,8 @@ mod poseidon2_constants;
 
 use acir::{AcirField, BlackBoxFunc};
 use acvm_blackbox_solver::{BlackBoxFunctionSolver, BlackBoxResolutionError};
-use ark_ec::{AffineRepr, CurveGroup, VariableBaseMSM};
-use ark_ff::{BigInt, MontConfig, PrimeField, Zero};
+use ark_ec::{AffineRepr, VariableBaseMSM};
+use ark_ff::{BigInt, MontConfig, PrimeField};
 
 type FieldElement = acir::acir_field::GenericFieldElement<ark_tom256::Fr>;
 
@@ -18,7 +18,7 @@ impl T256BlackboxSolver {
         x: FieldElement,
         y: FieldElement,
     ) -> Result<ark_secp256r1::Affine, BlackBoxResolutionError> {
-        Ok(ark_secp256r1::Affine::new_unchecked(
+        Ok(ark_secp256r1::Affine::new(
             ark_secp256r1::Fq::from_bigint(x.into_repr().into_bigint()).unwrap(),
             ark_secp256r1::Fq::from_bigint(y.into_repr().into_bigint()).unwrap(),
         ))
@@ -46,12 +46,7 @@ impl T256BlackboxSolver {
                 BlackBoxResolutionError::Failed(BlackBoxFunc::MultiScalarMul, e.to_string())
             })?;
 
-            // let scalar_high: u128 = T256BlackboxSolver::field_to_u128_limb(
-            //     &scalars_hi[i / 2],
-            //     BlackBoxFunc::MultiScalarMul,
-            // )?;
-
-            let scalar_bigint = scalars_lo[0].into_repr().into_bigint();
+            let scalar_bigint = scalars_lo[i/2].into_repr().into_bigint();
 
             // Check if this is smaller than the P256 modulus
             if scalar_bigint >= ark_secp256r1::FrConfig::MODULUS {
@@ -67,18 +62,6 @@ impl T256BlackboxSolver {
             big_ints.push(scalar_bigint);
         }
         Ok((bases, big_ints))
-    }
-
-    fn field_to_u128_limb(
-        limb: &FieldElement,
-        func: BlackBoxFunc,
-    ) -> Result<u128, BlackBoxResolutionError> {
-        limb.try_into_u128().ok_or_else(|| {
-            BlackBoxResolutionError::Failed(
-                func,
-                format!("Limb {} is not less than 2^128", limb.to_hex()),
-            )
-        })
     }
 }
 
