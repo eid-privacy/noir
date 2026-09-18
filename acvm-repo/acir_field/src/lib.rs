@@ -1,5 +1,5 @@
 #![forbid(unsafe_code)]
-#![cfg_attr(not(test), warn(unused_crate_dependencies, unused_extern_crates))]
+#![cfg_attr(not(test), warn(unused_extern_crates))]
 
 mod field_element;
 mod generic_ark;
@@ -28,6 +28,10 @@ pub fn truncate_to<F: AcirField>(input: &F, bits: u32) -> F {
 cfg_if::cfg_if! {
     if #[cfg(feature = "bls12_381")] {
         pub type FieldElement = field_element::FieldElement<ark_bls12_381::Fr>;
+    } else if #[cfg(feature = "p256")] {
+        pub type FieldElement = field_element::FieldElement<ark_secp256r1::Fr>;
+    } else if #[cfg(feature = "t256")] {
+        pub type FieldElement = field_element::FieldElement<ark_tom256::Fr>;
     } else {
         pub type FieldElement = field_element::FieldElement<ark_bn254::Fr>;
     }
@@ -48,4 +52,4 @@ macro_rules! assert_unique_feature {
 }
 // https://internals.rust-lang.org/t/mutually-exclusive-feature-flags/8601/7
 // If another field/feature is added, we add it here too
-assert_unique_feature!("bn254", "bls12_381");
+assert_unique_feature!("bn254", "bls12_381", "p256", "t256");

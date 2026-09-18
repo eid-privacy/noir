@@ -107,7 +107,7 @@ fn run_stdlib_tests(force: Force, inliner_aggressiveness: i64) {
                     let force_brillig = matches!(force, Force::Brillig);
                     let result = std::panic::catch_unwind(move || {
                         run_test(
-                            &bn254_blackbox_solver::Bn254BlackBoxSolver,
+                            &t256_blackbox_solver::T256BlackboxSolver,
                             &mut context,
                             &test_function,
                             std::io::stdout(),

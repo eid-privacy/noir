@@ -25,7 +25,7 @@ pub(crate) fn run_snippet(
         Err(e) => panic!("failed to compile program; brillig = {force_brillig}:\n{source}\n{e:?}"),
     };
 
-    let blackbox_solver = bn254_blackbox_solver::Bn254BlackBoxSolver;
+    let blackbox_solver = t256_blackbox_solver::T256BlackboxSolver;
     let foreign_call_executor = RefCell::new(DefaultForeignCallBuilder::default().build());
 
     let initial_witness = program.abi.encode(&inputs, None).expect("failed to encode");
