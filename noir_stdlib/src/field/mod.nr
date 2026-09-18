@@ -392,6 +392,18 @@ mod tests {
     };
 
     #[test]
+    fn test_lt_correct_near_field_modulus() {
+        // The maximum representable element of the active field. For fields whose
+        // modulus exceeds BN254's ~2^254 (e.g. T-256), this value doesn't fit in the
+        // two 128-bit limbs that `Field::lt`'s BN254 fast path assumes.
+        let max_value: Field = 0 - 1;
+        let zero: Field = 0;
+        assert(!max_value.lt(zero));
+        assert(zero.lt(max_value));
+        assert(!max_value.lt(max_value));
+    }
+
+    #[test]
     // docs:start:to_be_bits_example
     fn test_to_be_bits() {
         let field = 2;
