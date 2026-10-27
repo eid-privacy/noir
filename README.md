@@ -40,7 +40,8 @@ Changes compared to upstream Noir `v1.0.0-beta.26`:
 - New `acvm-repo/t256_blackbox_solver`: blackbox solver for Tom-256, including embedded curve
   operations (P-256 points) and Poseidon2 over the Tom-256 field.
 - `noir_stdlib`: embedded curve operations on P-256 points over the Tom-256 field (`field/t256.nr`).
-- Fixes from an external security review (curve membership checks, scalar handling in MSM).
+- Fixes from the [zkSecurity review](https://github.com/eid-privacy/zkp-reports/tree/main/security-review)
+  (curve membership checks, scalar handling in MSM).
 
 Releases are tagged `t256-v0.<noir beta>[-<n>]`, e.g. `t256-v0.26-2` (Noir `v1.0.0-beta.26`).
 The [eid-privacy/flakes](https://github.com/eid-privacy/flakes) repository has Nix packages for
